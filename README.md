@@ -43,4 +43,7 @@ i think i would be cool if scoreboard was immutable with respect to update, star
 would generate a new concurrency friendly versions. we could store older scoreboards in linkedlist and 
 have something alike eventsourcing
 
+no i think that this is overkill, with many matches run and updated concurrently there might be too
+much of performance penalty, method snapshot() will likely suffice
+
 
