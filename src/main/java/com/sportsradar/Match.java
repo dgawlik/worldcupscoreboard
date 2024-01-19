@@ -61,4 +61,17 @@ public class Match {
     public int getAwayTeamScore() {
         return awayTeamScore;
     }
+
+    public void setHomeTeamScore(int homeTeamScore) {
+        this.homeTeamScore = homeTeamScore;
+    }
+
+    public void setAwayTeamScore(int awayTeamScore) {
+        this.awayTeamScore = awayTeamScore;
+    }
+
+    public String matchToken() {
+        return String.format("%s/%s/%d", this.homeTeam.getNationality(),
+                this.awayTeam.getNationality(), this.nanoStartTimestamp);
+    }
 }

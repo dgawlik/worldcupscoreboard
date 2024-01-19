@@ -23,6 +23,8 @@ The scoreboard supports the following operations:
 what will we do if the match is removed by mistake? Or score is updated with wrong results? 
 scoreboard IMO should provide facility to restore it's state from back history. 
 
+maybe later...
+
 **concurrent usage**
 
 the order in which the games are started matters and we should synchronize access to update, start
