@@ -98,7 +98,8 @@ class ScoreBoardTest {
     public void nonexistent_match_test(){
         var scoreboard = new ScoreBoard();
 
-        Assertions.assertThatThrownBy(() -> scoreboard.updateMatch("fake", 1, 0));
+        Assertions.assertThatCode(() -> scoreboard.updateMatch("fake", 1, 0))
+                        .hasMessage("The match does not exist!");
     }
 
     @Test
@@ -110,7 +111,8 @@ class ScoreBoardTest {
         var scoreboard = new ScoreBoard();
         scoreboard.startNewMatch(t1, t2);
 
-        Assertions.assertThatThrownBy(() -> scoreboard.removeMatch("Poland/England"));
+        Assertions.assertThatCode(() -> scoreboard.removeMatch("Poland/England"))
+                        .hasMessage("The match does not exist");
     }
 
     @Test
@@ -122,7 +124,59 @@ class ScoreBoardTest {
         var scoreboard = new ScoreBoard();
         scoreboard.startNewMatch(t1, t2);
 
-        Assertions.assertThatThrownBy(() -> scoreboard.startNewMatch(t1, t2));
+        Assertions.assertThatCode(() -> scoreboard.startNewMatch(t1, t2))
+                        .hasMessage("No team can participate in 2 concurrent matches");
+    }
+
+    @Test
+    @DisplayName("Scoreboard throws on starting new match - null")
+    public void start_match_null(){
+        var scoreboard = new ScoreBoard();
+
+        Assertions.assertThatCode(() -> scoreboard.startNewMatch(null, null))
+                .hasMessage("Home team is null");
+    }
+
+    @Test
+    @DisplayName("Scoreboard throws on starting match with same team")
+    public void start_match_same_team() {
+        var t = new Team("Poland");
+        var scoreboard = new ScoreBoard();
+
+        Assertions.assertThatCode(() -> scoreboard.startNewMatch(t, t))
+                .hasMessage("Home and away teams must differ");
+    }
+
+    @Test
+    @DisplayName("Scoreboard update handle is null")
+    public void update_match_handle_is_null(){
+        var scoreboard = new ScoreBoard();
+
+        Assertions.assertThatCode(() -> scoreboard.updateMatch(null, 1, 1))
+                .hasMessage("Handle must be not blank");
+    }
+
+    @Test
+    @DisplayName("Scoreboard update score is negative")
+    public void update_match_handle_is_negative(){
+        var t1 = new Team("Poland");
+        var t2 = new Team("Germany");
+
+        var scoreboard = new ScoreBoard();
+
+        var m = scoreboard.startNewMatch(t1, t2);
+
+        Assertions.assertThatCode(() -> scoreboard.updateMatch(m, -1, 1))
+                .hasMessage("Home score must be equal or greater than zero!");
+    }
+
+    @Test
+    @DisplayName("Scoreboard remove handle is null")
+    public void remove_handle_is_null() {
+        var scoreboard = new ScoreBoard();
+
+        Assertions.assertThatCode(() -> scoreboard.removeMatch(null))
+                .hasMessage("Handle is null");
     }
 
 }

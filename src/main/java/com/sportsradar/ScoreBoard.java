@@ -29,6 +29,13 @@ public class ScoreBoard {
 
     public synchronized String startNewMatch(Team homeTeam, Team awayTeam) {
 
+        Objects.requireNonNull(homeTeam, "Home team is null");
+        Objects.requireNonNull(awayTeam, "Away team is null");
+
+        if (homeTeam.equals(awayTeam)) {
+            throw new IllegalArgumentException("Home and away teams must differ");
+        }
+
         for (Match m : this.matchOrder) {
             if (m.getAwayTeam().equals(homeTeam) || m.getAwayTeam().equals(awayTeam)
                     || m.getHomeTeam().equals(homeTeam) || m.getHomeTeam().equals(awayTeam)) {
@@ -45,6 +52,17 @@ public class ScoreBoard {
     }
 
     public synchronized void updateMatch(String handle, int homeScore, int awayScore) {
+
+        Objects.requireNonNull(handle, "Handle must be not blank");
+
+        if (homeScore < 0) {
+            throw new IllegalArgumentException("Home score must be equal or greater than zero!");
+        }
+
+        if (awayScore < 0) {
+            throw new IllegalArgumentException("Away score must be equal or greater than zero!");
+        }
+
         if (!this.ongoingMatches.containsKey(handle)) {
             throw new IllegalArgumentException("The match does not exist!");
         }
@@ -60,6 +78,8 @@ public class ScoreBoard {
     }
 
     public synchronized void removeMatch(String handle) {
+        Objects.requireNonNull(handle, "Handle is null");
+
         if (!this.ongoingMatches.containsKey(handle)) {
             throw new IllegalArgumentException("The match does not exist");
         }
